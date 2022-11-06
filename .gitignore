@@ -1,0 +1,10 @@
+// Igore executable files
+*.exe
+*.o
+*.out
+
+// Igore vs-code config files
+vscode/
+
+// Ignore vim swap files
+*.swp
