@@ -4,7 +4,7 @@
 *.out
 
 // Igore vs-code config files
-vscode/
+.vscode/
 
 // Ignore vim swap files
 *.swp
