@@ -142,12 +142,57 @@ TreeNode* predecessor_tree(TreeNode* root, TreeNode* x){
     }
     return pre;
 }
+
+void bst_delete(TreeNode* root, TreeNode* x){
+    TreeNode* parent;
+    TreeNode* p = root;
+    while(!p && p->data != x->data){
+        parent = p;
+        if(p->data > x->data) p = p->left;
+        else p = p->right;
+    }
+    // if node to delete is a leaf-node
+    if(!x->left && !x->right){
+        if(x == parent->left) parent->left=NULL;
+        else parent->right= NULL;
+
+        free(x); x= NULL; return;
+    }
+    // if node to delete, doesn't have a left child
+    else if(!x->left && x->right){
+        if(x == parent->left) parent->left = x->right;
+        else parent->right = x->right;
+
+        free(x); x=NULL; return;
+    }
+    // if node to delete, doesn't have a right child
+    else if(x->left && !x->right){
+        if(x == parent->left) parent->left = x->left;
+        else parent->right = x->left;
+
+        free(x); x=NULL; return;
+    }
+    // if node to delete is a inner node
+    else{
+        parent = x;
+        TreeNode* succ = x->right;
+        while(succ->left !=NULL){
+            parent = succ;
+            succ = succ->left;
+        }
+        x->data = succ->data;
+        x = succ;
+        if(parent->left == succ) parent->left=NULL;
+        else parent->right=NULL;
+    }
+}
+
 int main(){
-    TreeNode *tmp_p,*tmp_q;
-    tmp_q=bst_insert( 55);
-    bst_insert(30);
+    TreeNode *tmp_s,*tmp_p, *tmp_d;
+    tmp_p = bst_insert( 55);
+    tmp_d = bst_insert(30);
     bst_insert(65);
-    tmp_p = bst_insert(10);
+    tmp_s = bst_insert(10);
     bst_insert(40);
     bst_insert(90);
 
@@ -172,11 +217,16 @@ int main(){
     node = recursive_maximum_tree(root);
     cout << "Maximum value in tree : " << node->data << endl;
 
-    node = successor_tree(root,tmp_p);
+    node = successor_tree(root,tmp_s);
     cout << "Successor of 10 :"<< node->data <<endl;
     
-    node = predecessor_tree(root,tmp_q);
+    node = predecessor_tree(root,tmp_p);
     cout << "Predecessor of 55 :"<< node->data <<endl;
+
+    // change tmp_d value from the return pointer of insert operation
+    bst_delete(root,tmp_d);
+    inorder_traversal(root);
+
     return 0;
 }
     
